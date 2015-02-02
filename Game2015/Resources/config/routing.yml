@@ -1,0 +1,7 @@
+parcours:
+    path:     /game
+    defaults: { _controller: AipSeriousgameBundle:Configurationgame:configurationgameList }
+claro_aipseriousgame_bundle:
+    resource: "@AipSeriousgameBundle/Controller/"
+    type:     annotation
+    prefix:   /

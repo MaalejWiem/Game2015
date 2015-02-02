@@ -1,0 +1,10 @@
+plugin:
+  has_options: false
+      
+  resources:
+    - class: Aip\SeriousgameBundle\Entity\ConfigurationgameAggregate
+      name: test
+      is_exportable: false
+     
+
+ 

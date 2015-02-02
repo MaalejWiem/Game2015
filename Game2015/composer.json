@@ -1,0 +1,13 @@
+{
+	"name" : "aip/seriousgame-bundle",
+	"type" : "claroline-plugin",
+	"require" : {
+		"claroline/core-bundle" : "~4.0"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"Aip\\Seriousgamebundle" : ""
+		}
+	},
+	"target-dir" : "Aip/SeriousgameBundle"
+}

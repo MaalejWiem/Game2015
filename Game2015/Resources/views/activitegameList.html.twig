@@ -1,0 +1,250 @@
+{% macro renderPager(pager, aggregate) %}
+    {{
+        pagerfanta(
+            pager,
+            'twitter_bootstrap_translated',
+            {
+                'proximity' : 1,
+                'routeName': 'claro_activitegame_list',
+                'routeParams': {'aggregateId': aggregate.getId()}
+            }
+        )
+    }}
+{% endmacro %}
+
+{% from _self import renderPager %}
+
+{% extends "ClarolineCoreBundle:Workspace:layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script
+        src='{{ asset('bundles/aipseriousgame/js/activitegame_list.js') }}'
+        type="text/javascript"
+    >
+    </script>
+{% endblock %}
+{% block section_content %}
+
+
+<div>
+    
+   {{
+        macros.breadcrumbs([
+            
+            {
+                'name': 'activitegame_list'|trans({}, 'game'),
+                'href': path('claro_activitegame_list', {'aggregateId': _resource.getId()})
+            }
+            
+        ])
+    }}
+      <div>
+        {{ macros.flashBox() }}
+    </div>
+
+<div class="panel-body">
+    <h4>{{ 'resource'|trans({}, 'platform') }} : {{ _resource.getResourceNode().getName() }}</h4>
+    <br>
+
+   {% if is_granted('EDIT', resourceCollection) %}
+    <div>
+        
+        <a  href="{{ path('claro_configurationgame_list', {'aggregateId': _resource.getId()}) }}">
+           <button class="btn btn-primary" >
+                <i class="icon-file">
+                </i>  
+                {{ 'gerer_configurationgame'|trans({}, 'game') }}
+            </button>
+        </a>
+        </br>
+        </br>
+         
+         {% for configgame in configgame %}
+             
+          {% set enable = configgame.isEnable() %}
+           {% if enable == false %}
+                   <a  href="{{ path('claro_activitegame_create_form', {'aggregateId': _resource.getId()}) }}">
+                   <button class="btn btn-primary"  disabled = true>
+                      <i class="icon-plus">
+                     </i> 
+                {{ 'create_new_activitegame'|trans({}, 'game') }}
+                    </button>
+                   </a>
+               {% else %}
+               <a  href="{{ path('claro_activitegame_create_form', {'aggregateId': _resource.getId()}) }}">
+                 <button class="btn btn-primary"  >
+                <i class="icon-plus">
+                </i> 
+                {{ 'create_new_activitegame'|trans({}, 'game') }}
+            </button>
+              </a>
+            {% endif %}
+        
+         {% endfor %}
+        
+         
+       
+    </div>
+    {% endif %}
+       
+      
+    <br>
+ <div class="margin">
+        {% set nbPages = activitegame.getNbPages() %}
+
+        {% if nbPages > 1 %}
+            {{ renderPager(activitegame, _resource) }}
+        {% endif %}
+
+        {% for activitegame in activitegame %}
+        <div class="panel
+            {% if activitegame is not null %}
+                panel-primary
+            {% else %}
+                panel-danger
+            {% endif %}"
+         >
+            <div class="pull-right">
+                {% if (is_granted('EDIT', resourceCollection) or is_granted('DELETE', resourceCollection)) %}
+                    
+                    <a href="{{ path('claro_activitegame_edit_form', {'activitegameId': activitegame.getId()}) }}">
+                        <button type="button" class="btn btn-default">
+                            <i class="icon-edit"></i>
+                        </button>
+                    </a>
+                    <a href="{{ path('claro_activitegame_delete',{'aggregateId': _resource.getId()}) }}">
+                        <button
+                        
+                        class="btn btn-default"
+                        
+                    >
+                        &times;
+                    </button>
+                    </a>
+                    
+                  
+                   
+                    
+                {% endif %}
+            </div>
+            {% set nom = activitegame.getNom() %}
+
+            {% if nom is not null %}
+            <div class="panel-heading">
+                <b> Nom du l'activité : {{nom}} </b>
+            </div>
+            {% endif %}
+
+            <div class="panel-body">
+              
+            {% set instructions = activitegame.getInstructions() %}
+
+            {% if instructions is not null %}
+           
+            <div class="well well-sm">
+                 <b> Instructions:{{ instructions }}</b>
+            </div>
+            {% endif %} 
+                 
+                
+             <br>
+              
+                 
+                <a  href="{{ path('claro_configgame_edit_form', {'activitegameId': activitegame.getId()}) }}">
+           <center><button class="btn btn-primary" >
+                
+                {{ 'telechargergame'|trans({}, 'game') }}
+            </button></center>
+             </a>
+             <br>
+           {% for enablecla in enablecla %}
+             {% set enablecla = enablecla.isEnablecla() %}
+                {% if enablecla == false %}
+                 {% else %}
+                 <a  href="{{ path('claro_activitegame_tracesac', {'aggregateId': _resource.getId()}) }}">
+           <center><button class="btn btn-primary" >
+                
+                {{ 'clique'|trans({}, 'game') }}
+            </button></center>
+             </a>
+            
+                 {% endif %}
+                  {% endfor %}
+            <br>
+              {% for enablela in enablela %}
+              {% set enablela = enablela.isEnablela() %}
+                  {% if enablela == false %}
+                  
+                 
+               {% else %}
+              <center><a href="lacore:openform?id=111">
+                   <button class="btn btn-primary"  >
+                      
+                {{ 'lancegame'|trans({}, 'game') }}
+            </button>
+              </a></center>
+            {% endif %}
+        
+              
+              {% endfor %}
+            
+            </div>
+            
+
+            <div class="panel-footer">
+                {% if (is_granted('EDIT', resourceCollection) or is_granted('DELETE', resourceCollection)) %}
+                <div>
+                    <small>
+                        {% set creator = activitegame.getCreator() %}
+                        {{ 'created_on'|trans({}, 'game') }}
+                        {{ activitegame.getCreationDate().format('d-m-Y') }}
+                        {{ 'at'|trans({}, 'game') }}
+                        {{ activitegame.getCreationDate().format('H:i:s') }},
+                        {{ 'by'|trans({}, 'game') }}
+                        {{ creator.getFirstName() }}
+                        {{ creator.getLastName() }}
+                    </small>
+                </div>
+                {% endif %}
+                 {% set publicationDate = activitegame.getPublicationDate() %}
+                
+                {% if publicationDate is not null %}
+                    <div>
+                        <small>
+                            {{ 'published_on'|trans({}, 'game') }}
+                            {{ publicationDate.format('d-m-Y') }}
+                            
+                        </small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if nbPages > 1 %}
+            {{ renderPager(activitegame, _resource) }}
+        {% endif %}
+    </div>
+</div>
+
+
+<div id="delete-activitegame-validation-box" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>{{ 'activitegame_delete_confirm_title'|trans({}, 'game') }}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'activitegame_delete_confirm_message'|trans({}, 'game') }}</p>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="delete-confirm-ok" class="btn btn-primary" value="{{ 'ok'|trans({}, 'platform') }}"/>
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="{{ 'cancel'|trans({}, 'platform') }}"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

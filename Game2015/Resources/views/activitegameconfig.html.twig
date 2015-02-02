@@ -1,0 +1,86 @@
+{% macro renderPager(pager, aggregate) %}
+    {{
+        pagerfanta(
+            pager,
+            'twitter_bootstrap_translated',
+            {
+                'proximity' : 1,
+                'routeName': 'claro_activitegame_config',
+                'routeParams': {'aggregateId': aggregate.getId()}
+            }
+        )
+    }}
+{% endmacro %}
+
+{% from _self import renderPager %}
+
+{% extends "ClarolineCoreBundle:Workspace:layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script
+        src='{{ asset('bundles/aipprofilage/js/activitegame_list.js') }}'
+        type="text/javascript"
+    >
+    </script>
+{% endblock %}
+{% block section_content %}
+
+
+
+
+<div class="panel-body">
+    
+    <br>
+
+   
+      
+ 
+    <br>
+ <div class="margin">
+        
+        
+        {% for activitegame in activitegame %}
+        
+            
+            
+
+             <center><h4>Vous devez télécharger le jeu avant</h4></center>
+             {% set url = activitegame.getUrl() %}
+             {% set  port  = activitegame.getPort() %}
+             
+              {% if url is not null and port is null  %}
+            
+             <a  href={{ url }}>
+             {% endif %} 
+             {% if url is not null and port is not null  %}
+            
+             <a  href={{ url }}/{{ port }}>
+             {% endif %} 
+           <center><button class="btn btn-primary" >
+                
+                {{ 'telecharger'|trans({}, 'game') }}
+            </button><a href="{{ path('claro_activitegame_list', {'aggregateId': _resource.getId()}) }}">
+                <button  type="button" class="btn btn-primary">Retour</button>
+            </a></center>
+             </a>
+            <br>
+             {% set id = activitegame.getId() %}
+
+           
+          <center>  </center>
+             
+         
+                
+            </div>
+        </div>
+        {% endfor %}
+
+       
+    </div>
+</div>
+
+
+
+
+{% endblock %}

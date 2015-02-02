@@ -1,0 +1,39 @@
+{% macro renderPager(pager, aggregate) %}
+    {{
+        pagerfanta(
+            pager,
+            'twitter_bootstrap_translated',
+            {
+                'proximity' : 1,
+                'routeName': 'claro_telechargementgame_game',
+                'routeParams': {'aggregateId': aggregate.getId()}
+            }
+        )
+    }}
+{% endmacro %}
+
+{% from _self import renderPager %}
+
+{% extends "ClarolineCoreBundle:Workspace:layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script
+        src='{{ asset('bundles/aipseriousgame/js/monJS.js') }}'
+        type="text/javascript"
+    >
+    </script>
+{% endblock %}
+{% block section_content %}
+
+
+
+
+<div class="panel-body">
+      
+   <a href="C:\Users\admin\Desktop\GestionProj\GestionProj.exe">Lancez MonApplication</a>
+
+
+
+
+{% endblock %}
